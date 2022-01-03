@@ -51,9 +51,7 @@ const ItemCtrl = (function(){
 const UICtrl = (function(){
 	// UI selectors
 	const UISelectors = {
-		itemNameInput: '#item-name',
-		itemCaloriesInput: '#item-calories',
-		addBtn: '.add-btn'
+		itemList: '#item-list',
 	}
 
 	return {
@@ -72,7 +70,7 @@ const UICtrl = (function(){
 			});
 
 			// insert list items
-			document.querySelector("#item-list").innerHTML = html;
+			document.querySelector(UISelectors.itemList).innerHTML = html;
 		},
 		getItemInput: function(){
 			return {
