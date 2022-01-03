@@ -98,6 +98,7 @@ const UICtrl = (function(){
 	// UI selectors
 	const UISelectors = {
 		itemList: '#item-list',
+		itemNameInput: '#item-name',
 		itemCaloriesInput: '#item-calories',
 		addBtn: '.add-btn',
 		totalCalories: '.total-calories'
@@ -175,7 +176,7 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 				// add item to UI items list
 				UICtrl.addListItem(newItem)
 				// get total calories
-				const getTotalCalories = ItemCtrl.getTotalCalories();
+				const totalCalories = ItemCtrl.getTotalCalories();
 				// add total calories to UI
 				UICtrl.showTotalCalories(totalCalories);
 				// store in localStorage
