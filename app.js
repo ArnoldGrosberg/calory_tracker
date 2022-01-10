@@ -119,11 +119,11 @@ const UICtrl = (function(){
 		itemNameInput: '#item-name',
 		itemCaloriesInput: '#item-calories',
 		addBtn: '.add-btn',
-		deleteBtn: '.delete-btn',
-		deleteAllBtn: '.deleteAll-btn',
-		editBtn: '#secondary-content',
 		totalCalories: '.total-calories',
-		itemList: '#item-list'
+		deleteBtn: '.del-btn',
+		deleteAllBtn: '.deleteAll-btn',
+		editBtns: '.edit-btns'
+		
 	}
 
 	return {
@@ -136,7 +136,7 @@ const UICtrl = (function(){
 				html += `<li class="collection-item" id="item-${item.id}">
 				<strong>${item.name}: </strong> <em>${item.calories} Calories</em>
 				<a href="#" class="secondary-content">
-					<i class="fa fa-pencil"></i>
+					<i class="edit-item fa fa-pencil"></i>
 				</a>
 				</li>`;
 			});
@@ -161,11 +161,19 @@ const UICtrl = (function(){
 			// add ID
 			li.ad = `item-${item.id}`;
 			// add HTML
-			li.innerHTML = `<strong>${item.name}: </strong> <em>${item.calories} Calories </em> <a href="#" class="secondary-content>
-			<i class="fa fa-pencil"></i>
-			</a>`;
+			li.innerHTML = `<strong>${item.name}: </strong><em>${item.calories} Calories</em><a href="#" class="secondary-content">
+			<i class="edit-item fa fa-pencil"></i></a>`;
 			// insert item
 			document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', li)
+		},
+		editListItem: function(event){
+			//let thisEle = event.target;
+			// delete click event
+			deleteButton = document.querySelector(UISelectors.deleteBtn)
+			deleteButton.innerHTML = `<button class="delete-btn btn red darken-3"><i class="fa fa-minus"></i> Delete Meal</button>`;
+			deleteButton.addEventListener('click', deleteItem(event));
+
+			console.log("abscss")
 		},
 		clearInput: function(){
 			document.querySelector(UISelectors.itemNameInput).value = '';
@@ -173,6 +181,21 @@ const UICtrl = (function(){
 		},
 		showTotalCalories: function(totalCalories){
 			document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
+				},
+		clearUI: function(){
+			document.querySelector(UISelectors.itemList).innerHTML = '';
+			document.querySelector(UISelectors.totalCalories).textContent = '0';
+		},
+		hideShowBtns: function(){
+			if (event.target.parentElement.tagName == 'A') {
+				document.querySelector(UISelectors.addBtn).classList.add('hidden');
+				document.querySelector(UISelectors.editBtns).classList.remove('hidden');
+				item = event.target.parentElement.parentElement.id
+				items = StorageCtrl.getItemsFromStorage()
+				selectedItem = items[item.slice(5)]
+				document.querySelector(UISelectors.itemNameInput).value = selectedItem.name;
+				document.querySelector(UISelectors.itemCaloriesInput).value = selectedItem.calories;
+			}
 		}
 	}
 })();
@@ -187,17 +210,15 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit);
 			//deletes all
 			document.querySelector(UISelectors.deleteAllBtn).addEventListener('click', deleteAll);
-			// delete click event
-			document.querySelector(UISelectors.deleteBtn).addEventListener('click', deleteItem);
-			// add document reload event
-			document.addEventListener('DOMContentLoaded', getItemsFromStorage)
-			try {
 				// edit click event
-			document.querySelector(UISelectors.editBtn).addEventListener('click', editItem);
-		} catch (error) {
-			console.error(error);
-			console.log("  	Why it just error   ")
-		}
+			// document.querySelector(UISelectors.itemList).addEventListener('click', editItem);
+			// edit delete event
+			// deleteButton = document.querySelector(UISelectors.deleteBtn).addEventListener('click', deleteItem());
+			// add document reload event
+			document.addEventListener('DOMContentLoaded', getItemsFromStorage);
+			// clear all event
+		// edit event
+		document.querySelector(UISelectors.itemList).addEventListener('click', UICtrl.hideShowBtns)
 			
 		}
 		// item add submit function
@@ -239,19 +260,18 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 		const deleteAll = function(event){
 			// delete all
 			StorageCtrl.deleteAll();
-			location.reload()
+			UICtrl.clearUI()
 			event.preventDefault()
 		}
 		// delete one item
 		const deleteItem = function(event){
-			// delete item
-			console.log(event)
+						// first need the current item id or something
 			event.preventDefault()
 		}
 		// edit event
 		const editItem = function(event){
 			// add buttons (update, delete, back)
-			console.log("do something")
+			UICtrl.editListItem(event);
 			event.preventDefault()
 		}
 	
