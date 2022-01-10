@@ -28,6 +28,24 @@ const StorageCtrl = (function(){
 				items = JSON.parse(localStorage.getItem('items'));
 			}
 			return items;
+		},
+		deleteItem: function(item) {
+			// coming soon, not working
+			let items;
+			if(localStorage.getItem('items') === null){
+				items = [];
+			} else {
+				items.forEach(function(itemsElement, itemsIndex){
+					if(itemsElement){
+						items.splice(itemsIndex, 1);
+					}
+				});
+				this.storeItem(items);
+			}
+			
+		},
+		deleteAll: function() {
+			localStorage.clear();
 		}
 	}
 })();
@@ -101,7 +119,11 @@ const UICtrl = (function(){
 		itemNameInput: '#item-name',
 		itemCaloriesInput: '#item-calories',
 		addBtn: '.add-btn',
-		totalCalories: '.total-calories'
+		deleteBtn: '.delete-btn',
+		deleteAllBtn: '.deleteAll-btn',
+		editBtn: '#secondary-content',
+		totalCalories: '.total-calories',
+		itemList: '#item-list'
 	}
 
 	return {
@@ -114,7 +136,7 @@ const UICtrl = (function(){
 				html += `<li class="collection-item" id="item-${item.id}">
 				<strong>${item.name}: </strong> <em>${item.calories} Calories</em>
 				<a href="#" class="secondary-content">
-					<i class="edit-item fa fa-pencil"></i>
+					<i class="fa fa-pencil"></i>
 				</a>
 				</li>`;
 			});
@@ -140,7 +162,7 @@ const UICtrl = (function(){
 			li.ad = `item-${item.id}`;
 			// add HTML
 			li.innerHTML = `<strong>${item.name}: </strong> <em>${item.calories} Calories </em> <a href="#" class="secondary-content>
-			<i class="edit-item fa fa-pencil"></i>
+			<i class="fa fa-pencil"></i>
 			</a>`;
 			// insert item
 			document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', li)
@@ -163,8 +185,20 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			const UISelectors = UICtrl.getSelectors();
 			// add item event
 			document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit);
+			//deletes all
+			document.querySelector(UISelectors.deleteAllBtn).addEventListener('click', deleteAll);
+			// delete click event
+			document.querySelector(UISelectors.deleteBtn).addEventListener('click', deleteItem);
 			// add document reload event
 			document.addEventListener('DOMContentLoaded', getItemsFromStorage)
+			try {
+				// edit click event
+			document.querySelector(UISelectors.editBtn).addEventListener('click', editItem);
+		} catch (error) {
+			console.error(error);
+			console.log("  	Why it just error   ")
+		}
+			
 		}
 		// item add submit function
 		const itemAddSubmit = function(event){
@@ -200,6 +234,25 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			UICtrl.showTotalCalories(totalCalories);
 			// populate items list
 			UICtrl.populateItemList(items)
+		}
+		// deleting all items
+		const deleteAll = function(event){
+			// delete all
+			StorageCtrl.deleteAll();
+			location.reload()
+			event.preventDefault()
+		}
+		// delete one item
+		const deleteItem = function(event){
+			// delete item
+			console.log(event)
+			event.preventDefault()
+		}
+		// edit event
+		const editItem = function(event){
+			// add buttons (update, delete, back)
+			console.log("do something")
+			event.preventDefault()
 		}
 	
 	return {
