@@ -190,6 +190,14 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 		const getItemsFromStorage = function(){
 			// get items from storage
 			const items = StorageCtrl.getItemsFromStorage()
+			// set storage items to ItemCtrl data items
+			items.forEach(function(item){
+				ItemCtrl.addItem(item['name'], item['calories'])
+			})
+			// get total calories
+			const totalCalories = ItemCtrl.getTotalCalories();
+			// add total calories to UI
+			UICtrl.showTotalCalories(totalCalories);
 			// populate items list
 			UICtrl.populateItemList(items)
 		}
