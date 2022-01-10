@@ -216,7 +216,6 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			// deleteButton = document.querySelector(UISelectors.deleteBtn).addEventListener('click', deleteItem());
 			// add document reload event
 			document.addEventListener('DOMContentLoaded', getItemsFromStorage);
-			// clear all event
 		// edit event
 		document.querySelector(UISelectors.itemList).addEventListener('click', UICtrl.hideShowBtns)
 			
