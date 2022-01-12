@@ -67,7 +67,8 @@ const ItemCtrl = (function(){
 			//{id: 1, name: 'Cookie', calories: 400},
 			//{id: 2, name: 'Eggs', calories: 300}
 		],
-		total: 0
+		total: 0,
+		currentItem: null
 	}
 
 	return {
@@ -120,10 +121,11 @@ const UICtrl = (function(){
 		itemCaloriesInput: '#item-calories',
 		addBtn: '.add-btn',
 		totalCalories: '.total-calories',
-		deleteBtn: '.del-btn',
-		deleteAllBtn: '.deleteAll-btn',
-		editBtns: '.edit-btns'
-		
+		updateBtn: '.update-btn',
+		delBtn: '.del-btn',
+		delAllBtn: '.delAll-btn',
+		editBtns: '.edit-btns',
+		backBtn: '.back-btn'
 	}
 
 	return {
@@ -161,32 +163,25 @@ const UICtrl = (function(){
 			// add ID
 			li.ad = `item-${item.id}`;
 			// add HTML
-			li.innerHTML = `<strong>${item.name}: </strong><em>${item.calories} Calories</em><a href="#" class="secondary-content">
-			<i class="edit-item fa fa-pencil"></i></a>`;
+			li.innerHTML = `<strong>${item.name}: </strong> <em>${item.calories} Calories </em> <a href="#" class="secondary-content>
+			<i class="edit-item fa fa-pencil"></i>
+			</a>`;
 			// insert item
 			document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend', li)
-		},
-		editListItem: function(event){
-			//let thisEle = event.target;
-			// delete click event
-			deleteButton = document.querySelector(UISelectors.deleteBtn)
-			deleteButton.innerHTML = `<button class="delete-btn btn red darken-3"><i class="fa fa-minus"></i> Delete Meal</button>`;
-			deleteButton.addEventListener('click', deleteItem(event));
-
-			console.log("abscss")
 		},
 		clearInput: function(){
 			document.querySelector(UISelectors.itemNameInput).value = '';
 			document.querySelector(UISelectors.itemCaloriesInput).value = '';
 		},
-		showTotalCalories: function(totalCalories){
-			document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
-				},
+
 		clearUI: function(){
 			document.querySelector(UISelectors.itemList).innerHTML = '';
 			document.querySelector(UISelectors.totalCalories).textContent = '0';
 		},
-		hideShowBtns: function(){
+		showTotalCalories: function(totalCalories){
+			document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
+		},
+		hideShowBtns: function(event){
 			if (event.target.parentElement.tagName == 'A') {
 				document.querySelector(UISelectors.addBtn).classList.add('hidden');
 				document.querySelector(UISelectors.editBtns).classList.remove('hidden');
@@ -196,6 +191,14 @@ const UICtrl = (function(){
 				document.querySelector(UISelectors.itemNameInput).value = selectedItem.name;
 				document.querySelector(UISelectors.itemCaloriesInput).value = selectedItem.calories;
 			}
+		},
+		backUI: function(){
+			document.querySelector(UISelectors.editBtns).classList.add('hidden');
+			document.querySelector(UISelectors.addBtn).classList.remove('hidden');
+			UICtrl.clearInput();
+		},
+		helloUI: function(){
+			console.log("Hello UI?")
 		}
 	}
 })();
@@ -208,20 +211,23 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			const UISelectors = UICtrl.getSelectors();
 			// add item event
 			document.querySelector(UISelectors.addBtn).addEventListener('click', itemAddSubmit);
-			//deletes all
-			document.querySelector(UISelectors.deleteAllBtn).addEventListener('click', deleteAll);
-				// edit click event
-			// document.querySelector(UISelectors.itemList).addEventListener('click', editItem);
-			// edit delete event
-			// deleteButton = document.querySelector(UISelectors.deleteBtn).addEventListener('click', deleteItem());
 			// add document reload event
-			document.addEventListener('DOMContentLoaded', getItemsFromStorage);
+			document.addEventListener('DOMContentLoaded', getItemsFromStorage)
+			// delete all event
+			document.querySelector(UISelectors.delAllBtn).addEventListener('click', deleteAll);
+			// delete item event
+			document.querySelector(UISelectors.delBtn).addEventListener('click', deleteItem);
+			// Update mean event
+			document.querySelector(UISelectors.updateBtn).addEventListener('click', renameItem);
 		// edit event
 		document.querySelector(UISelectors.itemList).addEventListener('click', UICtrl.hideShowBtns)
-			
+		// back event
+		document.querySelector(UISelectors.backBtn).addEventListener('click', UICtrl.backUI)
+		
+
 		}
 		// item add submit function
-		const itemAddSubmit = function(event){
+		const itemAddSubmit = function(){
 			// get form input from UI Controller
 			const input = UICtrl.getItemInput()
 			// check for name and calorie input
@@ -255,6 +261,7 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			// populate items list
 			UICtrl.populateItemList(items)
 		}
+
 		// deleting all items
 		const deleteAll = function(event){
 			// delete all
@@ -265,6 +272,8 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 		// delete one item
 		const deleteItem = function(event){
 						// first need the current item id or something
+						console.log("Delete the item, still developing it. I need the current item's id in order to delete it.")
+						UICtrl.backUI();
 			event.preventDefault()
 		}
 		// edit event
@@ -273,6 +282,22 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			UICtrl.editListItem(event);
 			event.preventDefault()
 		}
+		const renameItem = function(){
+			// get form input from UI Controller
+			const input = UICtrl.getItemInput()
+			// check for name and calorie input
+			if(input.name !== '' && input.calories !==''){
+				itemAddSubmit();
+				UICtrl.backUI();
+				console.log("Delete the outdated item, still developing it.")
+				// DELETE THE LAST ITEM! (I need to develop the delete function first in order to get it updated)
+			}
+			event.preventDefault()
+		}
+		const hello = function(){
+			console.log("Hello?")
+		}
+	
 	
 	return {
 		init: function(){

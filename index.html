@@ -5,10 +5,10 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://kit.fontawesome.com/1f8e4cfeb9.js" crossorigin="anonymous"></script>
-    		<style>
+    <title>calory project</title>
+    <style>
 			.hidden {display: none;}
 		</style>
-    <title>calory project</title>
 </head>
 <body>
 	<!-- Navbar -->
@@ -38,14 +38,12 @@
 							<input type="text" placeholder="Add Calories" id="item-calories">
 							<label for="item-calories">Calories</label>
 						</div>
-						<div>
 						<button class="add-btn btn blue darken-3"><i class="fa fa-plus"></i> Add Meal</button>
 						<div class="hidden edit-btns">
-								<button class="update-btn btn orange darken-1"><i class="fas fa-edit"></i>update meal</button>
-								<button class="del-btn btn red"><i class="fas fa-trash"></i>delete meal</button>
-								<button class="back-btn btn grey darken-1 col s2 right"><i class="fas fa-arrow-circle-left"></i>back</button>
-							</div>
-						</div>
+						<button class="update-btn btn orange"><i class="fa fa-edit"></i> Update Meal</button>
+						<button class="del-btn btn red"><i class="fas fa-trash"></i>delete meal</button>
+						<button class="back-btn btn grey darken-1 col s2 right"><i class="fas fa-arrow-circle-left"></i>back</button>
+					</div>
 					</div>
 				</form>
 			</div>
@@ -54,7 +52,8 @@
 
 	<!-- Calorie Count -->
 	<h3 class="center-align">Total Calories: <span class="total-calories">0</span></h3>
-<button class="deleteAll-btn btn red darken-3"><i class="fa fa-minus"></i> Delete All Meals</button>
+	<!-- Delete all button -->
+	<button class="delAll-btn btn red darken-3"><i class="fa fa-minus"></i> Delete All Meals</button>
 	<!-- Item List -->
 	<ul id="item-list" class="collection">
 		
