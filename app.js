@@ -31,12 +31,13 @@ const StorageCtrl = (function(){
 		},
 		deleteItem: function(item) {
 			// coming soon, not working
+			console.log("Delete the item, still developing it.");
 			let items;
 			if(localStorage.getItem('items') === null){
 				items = [];
 			} else {
-				items.forEach(function(itemsElement, itemsIndex){
-					if(itemsElement){
+				items.forEach(function(item, itemsIndex){
+					if(item){
 						items.splice(itemsIndex, 1);
 					}
 				});
@@ -63,9 +64,9 @@ const ItemCtrl = (function(){
 	// Data Structure
 	const data = {
 		items: [
-			//{id: 0, name: 'Steak Dinner', calories: 1200},
-			//{id: 1, name: 'Cookie', calories: 400},
-			//{id: 2, name: 'Eggs', calories: 300}
+			// {id: 0, name: 'Steak Dinner', calories: 1200},
+			// {id: 1, name: 'Cookie', calories: 400},
+			// {id: 2, name: 'Eggs', calories: 300}
 		],
 		total: 0,
 		currentItem: null
@@ -79,9 +80,11 @@ const ItemCtrl = (function(){
 			let ID;
 			// Create ID
 			if(data.items.lenght > 0){
-				ID = data.items[data.items.lenght - 1].id + 1
+				ID = data.items.lenght;
+				data.items.lenght = data.items.lenght +1;
 			} else {
-				ID = 0
+				data.items.lenght = 1;
+				ID = 0;
 			}
 			// calories to number
 			calories = parseInt(calories);
@@ -190,6 +193,7 @@ const UICtrl = (function(){
 				selectedItem = items[item.slice(5)]
 				document.querySelector(UISelectors.itemNameInput).value = selectedItem.name;
 				document.querySelector(UISelectors.itemCaloriesInput).value = selectedItem.calories;
+				ItemCtrl.currentItem = event;
 			}
 		},
 		backUI: function(){
@@ -271,8 +275,9 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 		}
 		// delete one item
 		const deleteItem = function(event){
-						// first need the current item id or something
-						console.log("Delete the item, still developing it. I need the current item's id in order to delete it.")
+						 console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id);
+						StorageCtrl.deleteItem();
+						UICtrl.deleteItem();
 						UICtrl.backUI();
 			event.preventDefault()
 		}
