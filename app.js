@@ -30,13 +30,12 @@ const StorageCtrl = (function(){
 			return items;
 		},
 		deleteItem: function() {
-			// coming soon, not working
-			
+			// gets item list
 			let items  = JSON.parse(localStorage.getItem('items'));
-			console.log("items    " + Math.abs(items.indexOf(ItemCtrl.currentItem)));
-			// delete old item
-			items.splice(Math.abs(items.indexOf(ItemCtrl.currentItem)), -1);
-			// reset ls
+			// delete old item from list
+			items.splice(Math.abs(items.indexOf(ItemCtrl.currentItem)), 1);
+
+			// saves item list
 			localStorage.setItem("items", JSON.stringify(items));
 		},
 		deleteAll: function() {
@@ -272,6 +271,7 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 						 console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id);
 						StorageCtrl.deleteItem();
 						UICtrl.backUI();
+						location.reload(); 
 			event.preventDefault()
 		}
 		// edit event
