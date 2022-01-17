@@ -29,21 +29,15 @@ const StorageCtrl = (function(){
 			}
 			return items;
 		},
-		deleteItem: function(item) {
+		deleteItem: function() {
 			// coming soon, not working
-			console.log("Delete the item, still developing it.");
-			let items;
-			if(localStorage.getItem('items') === null){
-				items = [];
-			} else {
-				items.forEach(function(item, itemsIndex){
-					if(item){
-						items.splice(itemsIndex, 1);
-					}
-				});
-				this.storeItem(items);
-			}
 			
+			let items  = JSON.parse(localStorage.getItem('items'));
+			console.log("items    " + Math.abs(items.indexOf(ItemCtrl.currentItem)));
+			// delete old item
+			items.splice(Math.abs(items.indexOf(ItemCtrl.currentItem)), -1);
+			// reset ls
+			localStorage.setItem("items", JSON.stringify(items));
 		},
 		deleteAll: function() {
 			localStorage.clear();
@@ -277,7 +271,6 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 		const deleteItem = function(event){
 						 console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id);
 						StorageCtrl.deleteItem();
-						UICtrl.deleteItem();
 						UICtrl.backUI();
 			event.preventDefault()
 		}
@@ -294,8 +287,7 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			if(input.name !== '' && input.calories !==''){
 				itemAddSubmit();
 				UICtrl.backUI();
-				console.log("Delete the outdated item, still developing it.")
-				// DELETE THE LAST ITEM! (I need to develop the delete function first in order to get it updated)
+				App.deleteItem();
 			}
 			event.preventDefault()
 		}
