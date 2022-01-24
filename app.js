@@ -32,12 +32,18 @@ const StorageCtrl = (function(){
 		deleteItem: function() {
 			// gets item list
 			let items  = JSON.parse(localStorage.getItem('items'));
-			// delete old item from list
-			items.splice((Math.abs(items.indexOf(ItemCtrl.currentItem))), 1);
-			console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id + " päris id");
-			console.log((Math.abs(items.indexOf(ItemCtrl.currentItem))) + " See on ID?")
-			// saves item list
-			console.log(localStorage.setItem("items", JSON.stringify(items)) + "   end delete");
+
+
+			// console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id + " päris id");
+			// console.log(items.indexOf(ItemCtrl.currentItem) + " See on ID?")
+			// console.log(items[Math.abs(items.indexOf(ItemCtrl.currentItem))].name + " See on ITEM?")
+			// console.log(items[parseInt(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id.slice(5))].name + " See on ITEM JAH?")
+			
+			// removes the old item from items  (delete old item from list)
+			items.splice(items[parseInt(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id.slice(5))], 1);
+			
+			// updates LS
+			localStorage.setItem("items", JSON.stringify(items));
 		},
 		deleteAll: function() {
 			localStorage.clear();
@@ -180,14 +186,12 @@ const UICtrl = (function(){
 		},
 		hideShowBtns: function(event){
 			if (event.target.parentElement.tagName == 'A') {
+				ItemCtrl.currentItem = event;
 				document.querySelector(UISelectors.addBtn).classList.add('hidden');
 				document.querySelector(UISelectors.editBtns).classList.remove('hidden');
-				item = event.target.parentElement.parentElement.id
-				items = StorageCtrl.getItemsFromStorage()
-				selectedItem = items[item.slice(5)]
-				document.querySelector(UISelectors.itemNameInput).value = selectedItem.name;
-				document.querySelector(UISelectors.itemCaloriesInput).value = selectedItem.calories;
-				ItemCtrl.currentItem = event;
+				document.querySelector(UISelectors.itemNameInput).value = ItemCtrl.currentItem.originalTarget.parentElement.parentElement.children[0].textContent.slice(0,-2);
+				document.querySelector(UISelectors.itemCaloriesInput).value = ItemCtrl.currentItem.originalTarget.parentElement.parentElement.children[1].textContent.slice(0,-9);
+				
 			}
 		},
 		backUI: function(){
