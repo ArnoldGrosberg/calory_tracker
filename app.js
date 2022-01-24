@@ -33,10 +33,11 @@ const StorageCtrl = (function(){
 			// gets item list
 			let items  = JSON.parse(localStorage.getItem('items'));
 			// delete old item from list
-			items.splice(Math.abs(items.indexOf(ItemCtrl.currentItem)), 1);
-
+			items.splice((Math.abs(items.indexOf(ItemCtrl.currentItem))), 1);
+			console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id + " päris id");
+			console.log((Math.abs(items.indexOf(ItemCtrl.currentItem))) + " See on ID?")
 			// saves item list
-			localStorage.setItem("items", JSON.stringify(items));
+			console.log(localStorage.setItem("items", JSON.stringify(items)) + "   end delete");
 		},
 		deleteAll: function() {
 			localStorage.clear();
@@ -267,12 +268,11 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			event.preventDefault()
 		}
 		// delete one item
-		const deleteItem = function(event){
+		const deleteItem = function(){
 						 console.log(ItemCtrl.currentItem.originalTarget.parentElement.parentElement.id);
 						StorageCtrl.deleteItem();
 						UICtrl.backUI();
 						location.reload(); 
-			event.preventDefault()
 		}
 		// edit event
 		const editItem = function(event){
@@ -287,7 +287,7 @@ const App = (function(ItemCtrl, StorageCtrl, UICtrl){
 			if(input.name !== '' && input.calories !==''){
 				itemAddSubmit();
 				UICtrl.backUI();
-				App.deleteItem();
+				deleteItem();
 			}
 			event.preventDefault()
 		}
